@@ -45,7 +45,7 @@ struct Cache{
         int index = (address/blocksz)%set;
         cout<<"inside check"<<endl;
         for (int i = 0; i<assoc; i++){
-            cout<<"inside check loop"<<endl;
+            // cout<<"inside check loop"<<endl;
             if (cache[index][i][2] == address/blocksz){
                 cout<<index<<endl;
                 return 1;
@@ -56,7 +56,7 @@ struct Cache{
     // reading data from memory
     tuple<int,int> read(int address,int counter){
         int index = (address/blocksz)%set;
-        vector<int> v;
+
         for (int i = 0; i<assoc; i++){
             if (cache[index][i][2] == address/blocksz){
                 cache[index][i][3]=counter;
@@ -83,6 +83,7 @@ struct Cache{
     // updating data
     int update(int address,int counter,int dirtybit)
     {
+        cout<<"update" <<" "<<address<<endl;
         int index = (address/blocksz)%set;
         for (int i = 0; i<assoc; i++){
         if (cache[index][i][2] == address/blocksz){
@@ -94,10 +95,11 @@ struct Cache{
     }
 
     tuple<int,int,int,int> write(int address,int counter,int dirtybit){
+        cout<<"write "<<address<<endl;
         int index = (address/blocksz)%set;
         int psecudo_assoc=-1;
         for (int i = 0; i<assoc; i++){
-            if(cache[index][i][2]==0)
+            if(cache[index][i][2]==-1)
             {
                psecudo_assoc=i; 
             }
@@ -146,12 +148,14 @@ int main(int argc, char *argv[]){//int blsize, int l1size, int l1assoc,int l2siz
     int l2set = l2size/(blsize*l2assoc);
     Cache L1cache = Cache(l1set,l1assoc,blsize);
     Cache L2cache = Cache(l2set,l2assoc,blsize);
-    ifstream myfile(argv[1]);            
+    ifstream myfile(argv[6]);            
     // int evict_addresi; 
     int glcounter,i; 
     int l=0;
-    while(!myfile.eof() && l<10){
+    while(!myfile.eof() && l<40){
         i=l;
+        l++;
+        cout<<"starting new line reading from file line no "<<i<<endl;
         glcounter=i;
         vector<int> data;
         string line,action,word2;
@@ -159,6 +163,7 @@ int main(int argc, char *argv[]){//int blsize, int l1size, int l1assoc,int l2siz
         stringstream ss(line); // Create a stringstream object with the line
         ss >> action >> word2; // Extract the two words from the line 
         int address_int = stoi(word2, 0, 16);
+        cout<<"priting address and action "<<address_int<<" "<<action<<endl;
         if (action=="r"){
             int address=address_int;
             int f1 = L1cache.check(address); // is data there or not .
@@ -247,6 +252,18 @@ int main(int argc, char *argv[]){//int blsize, int l1size, int l1assoc,int l2siz
             }
         }
     }
-    cout<<"Adress check"<<endl;
+    cout<<" final answer "<<endl;
+    cout<<" for l1"<<endl;
+    cout<<L1cache.readhit<<endl;
+    cout<<L1cache.readmiss<<endl;
+    cout<<L1cache.writehit<<endl;
+    cout<<L1cache.writemiss<<endl;
+    cout<<L1cache.writeback<<endl;
+    cout<<" for l2"<<endl;
+    cout<<L2cache.readhit<<endl;
+    cout<<L2cache.readmiss<<endl;
+    cout<<L2cache.writehit<<endl;
+    cout<<L2cache.writemiss<<endl;
+    cout<<L2cache.writeback<<endl;
     // cout<<L1cache.check(data[2][1])<<endl;
 }
