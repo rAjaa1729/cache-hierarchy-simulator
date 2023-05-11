@@ -259,6 +259,7 @@ int main(int argc, char *argv[]){//int blsize, int l1size, int l1assoc,int l2siz
                         else{
                             L2cache.writeback+=1;
                             L1cache.writeback+=1;
+                            L2cache.writehit+=1;
                         }
                    }
                 }
@@ -368,6 +369,7 @@ int main(int argc, char *argv[]){//int blsize, int l1size, int l1assoc,int l2siz
                         else{
                             L2cache.writeback+=1;
                             L1cache.writeback+=1;
+                            L2cache.writehit+=1;
                         }
                    }
                 }
